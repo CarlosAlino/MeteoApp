@@ -38,31 +38,6 @@ db = init_firestore()
 
 
 # -------------------------------------------------------------------
-# 🌤️ WEATHER (actual)
-# -------------------------------------------------------------------
-
-def get_weather_openweather(city="Madrid"):
-    API_KEY = os.environ["OPENWEATHER_API_KEY"]
-
-    url = f"https://api.openweathermap.org/data/2.5/weather?q={city}&appid={API_KEY}&units=metric&lang=es"
-
-    r = requests.get(url)
-
-    if r.status_code != 200:
-        raise Exception("OpenWeather error: " + r.text)
-
-    data = r.json()
-
-    return {
-        "city": city,
-        "temperature": data["main"]["temp"],
-        "humidity": data["main"]["humidity"],
-        "description": data["weather"][0]["description"],
-        "icon": data["weather"][0]["icon"],
-        "wind_speed": data["wind"]["speed"],
-    }
-
-# -------------------------------------------------------------------
 # 📆 FORECAST (5 días · 3h)
 # -------------------------------------------------------------------
 
@@ -90,11 +65,15 @@ def save_forecast_overwrite(city: str, forecast: list):
             "index": idx,
             "datetime": entry.get("dt_txt"),
             "temp": entry["main"].get("temp"),
+            "temp_min": entry["main"].get("temp_min"),
+            "temp_max": entry["main"].get("temp_max"),
+            "pressure": entry["main"].get("pressure"),
             "humidity": entry["main"].get("humidity"),
-            "description": entry["weather"][0]["description"],
-            "icon": entry["weather"][0]["icon"],
+            "description": entry["weather"][0].get("description"),
+            "icon": entry["weather"][0].get("icon"),
             "wind_speed": entry["wind"].get("speed"),
-            "pop": entry.get("pop", 0),
+            "wind_deg": entry["wind"].get("deg"),
+            "pop": entry.get("pop", 0),  # Probabilitat real (0–1)
             "timestamp_request": firestore.SERVER_TIMESTAMP,
         }
         if int(doc_id)<=16:
@@ -155,3 +134,4 @@ def http_trigger(req: func.HttpRequest) -> func.HttpResponse:
             f"Error: {str(e)}",
             status_code=500
         )
+
