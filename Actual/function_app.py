@@ -55,11 +55,16 @@ def get_weather_openweather(city):
     #return data
     # Formateamos a una estructura limpia
     return {
-        "city": city,
+        "city": data.get("name", city),
         "temperature": data["main"]["temp"],
+        "temp_min": data["main"]["temp_min"],
+        "temp_max": data["main"]["temp_max"],
+        "pressure": data["main"]["pressure"],
         "humidity": data["main"]["humidity"],
+        "wind_speed": data["wind"]["speed"],
+        "wind_deg": data["wind"].get("deg"),
         "description": data["weather"][0]["description"],
-        "wind_speed": data["wind"]["speed"]
+        "icon": data["weather"][0]["icon"],
     }
 
 
@@ -119,4 +124,5 @@ def http_trigger(req: func.HttpRequest) -> func.HttpResponse:
         return func.HttpResponse(
             f"Error: {str(e)}",
             status_code=500
+
         )
