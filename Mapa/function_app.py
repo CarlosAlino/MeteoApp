@@ -5,9 +5,6 @@ import logging
 
 app = func.FunctionApp(http_auth_level=func.AuthLevel.ANONYMOUS)
 
-# EJEMPLO DE URL A LLAMAR DESDE AZURE:
-# https://{tu-funcion}.azurewebsites.net/api/get_map?op=CL&z=3&x=4&y=2
-
 @app.route(route="get_map", methods=["GET"])
 def get_map(req: func.HttpRequest) -> func.HttpResponse:
     logging.info("Solicitud recibida para obtener mapa OpenWeather")
@@ -32,22 +29,32 @@ def get_map(req: func.HttpRequest) -> func.HttpResponse:
             status_code=500
         )
 
-    # --- 3. Construir URL ---
-    url = f"http://maps.openweathermap.org/maps/2.0/weather/{op}/{z}/{x}/{y}?appid={api_key}"
+    # --- 3. Construir URL CORRECTA ---
+    # La URL correcta de OpenWeather es tile.openweathermap.org
+    url = f"https://tile.openweathermap.org/map/{op}/{z}/{x}/{y}.png?appid={api_key}"
     logging.info(f"Llamando a la API de OpenWeather: {url}")
 
-    # --- 4. Llamada HTTP ---
-    response = requests.get(url)
+    # --- 4. Llamada HTTP con timeout ---
+    try:
+        response = requests.get(url, timeout=10)
+        
+        if response.status_code != 200:
+            logging.error(f"Error {response.status_code}: {response.text}")
+            return func.HttpResponse(
+                f"Error al obtener mapa: {response.status_code}",
+                status_code=response.status_code
+            )
 
-    if response.status_code != 200:
+        # --- 5. Devolver imagen ---
         return func.HttpResponse(
-            f"Error al obtener mapa: {response.status_code} - {response.text}",
-            status_code=response.status_code
+            body=response.content,
+            mimetype="image/png",
+            status_code=200
         )
-
-    # --- 5. Devolver imagen ---
-    return func.HttpResponse(
-        body=response.content,
-        mimetype="image/png",
-        status_code=200
-    )
+        
+    except requests.exceptions.RequestException as e:
+        logging.error(f"Error en la petición: {str(e)}")
+        return func.HttpResponse(
+            f"Error de conexión: {str(e)}",
+            status_code=500
+        )
