@@ -5,6 +5,7 @@ import json
 from google.cloud import firestore
 from google.oauth2 import service_account
 import requests
+from datetime import datetime, timezone, timedelta
 
 
 # -------------------------------------------------------------------
@@ -50,7 +51,7 @@ def get_weather_openweather(city):
 
     if r.status_code != 200:
         raise Exception("OpenWeather error: " + r.text)
-
+    utc_plus_1 = timezone(timedelta(hours=1))
     data = r.json()
     #return data
     # Formateamos a una estructura limpia
@@ -65,6 +66,8 @@ def get_weather_openweather(city):
         "wind_deg": data["wind"].get("deg"),
         "description": data["weather"][0]["description"],
         "icon": data["weather"][0]["icon"],
+        "sunrise": datetime.fromtimestamp(data["sys"]["sunrise"],tz=utc_plus_1).strftime("%H:%M"),
+        "sunset": datetime.fromtimestamp(data["sys"]["sunset"],tz=utc_plus_1).strftime("%H:%M")
     }
 
 
