@@ -65,8 +65,6 @@ def save_forecast_overwrite(city: str, forecast: list):
             "index": idx,
             "datetime": entry.get("dt_txt"),
             "temp": entry["main"].get("temp"),
-            "temp_min": entry["main"].get("temp_min"),
-            "temp_max": entry["main"].get("temp_max"),
             "pressure": entry["main"].get("pressure"),
             "humidity": entry["main"].get("humidity"),
             "description": entry["weather"][0].get("description"),
@@ -88,7 +86,7 @@ def save_forecast_overwrite(city: str, forecast: list):
 app = func.FunctionApp(http_auth_level=func.AuthLevel.FUNCTION)
 
 @app.timer_trigger(
-    schedule="0 * */3 * * *",
+    schedule="0 0 */3 * * *",
     arg_name="myTimer",
     run_on_startup=False,
     use_monitor=False
@@ -111,27 +109,4 @@ def timer_trigger(myTimer: func.TimerRequest) -> None:
         logging.error(f"❌ Error: {e}")
 
 
-# -------------------------------------------------------------------
-# 🌍 HTTP trigger (test)
-# -------------------------------------------------------------------
-
-@app.route(route="test_weather")
-def http_trigger(req: func.HttpRequest) -> func.HttpResponse:
-    logging.info("➡️ HTTP trigger llamado")
-
-    try:
-        city = req.params.get("city", "Madrid")
-        weather = get_weather_openweather(city)
-
-        return func.HttpResponse(
-            json.dumps(weather, indent=4),
-            mimetype="application/json",
-            status_code=200
-        )
-
-    except Exception as e:
-        return func.HttpResponse(
-            f"Error: {str(e)}",
-            status_code=500
-        )
 
