@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">MeteoApp</string>
+    <string name="navegation_drawer_open">Open</string>
+    <string name="navegation_drawer_close">Close</string>
+</resources>

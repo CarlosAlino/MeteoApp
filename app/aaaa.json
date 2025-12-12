@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "1010572048144",
+    "project_id": "meteoapp-8ad78",
+    "storage_bucket": "meteoapp-8ad78.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1010572048144:android:7ff4e1a617114583951795",
+        "android_client_info": {
+          "package_name": "com.example.metarapp"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC7Eycrz1jvfKHjYNYJG-SV4sIrl4naRek"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1010572048144:android:afcf4a7940405c23951795",
+        "android_client_info": {
+          "package_name": "com.telematica.meteoapp"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC7Eycrz1jvfKHjYNYJG-SV4sIrl4naRek"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

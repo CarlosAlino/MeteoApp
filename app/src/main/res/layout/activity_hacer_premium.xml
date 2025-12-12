@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+xmlns:android="http://schemas.android.com/apk/res/android"
+xmlns:app="http://schemas.android.com/apk/res-auto"
+xmlns:tools="http://schemas.android.com/tools"
+android:id="@+id/main"
+android:layout_width="match_parent"
+android:layout_height="match_parent"
+android:padding="24dp"
+tools:context=".HacerPremiumActivity">
+
+<TextView
+    android:id="@+id/tv_title_premium"
+    android:layout_width="0dp"
+    android:layout_height="wrap_content"
+    android:text="Conviértete en Usuario Premium ✨"
+    android:textSize="24sp"
+    android:textStyle="bold"
+    android:gravity="center"
+    app:layout_constraintTop_toTopOf="parent"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintEnd_toEndOf="parent"
+    android:layout_marginTop="32dp"/>
+
+<TextView
+    android:id="@+id/tv_description_premium"
+    android:layout_width="0dp"
+    android:layout_height="wrap_content"
+    android:text="Desbloquea mapas avanzados, pronósticos por hora detallados, elimina la publicidad y accede a características exclusivas por solo 4.99 EUR."
+    android:textSize="16sp"
+    android:gravity="center"
+    app:layout_constraintTop_toBottomOf="@id/tv_title_premium"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintEnd_toEndOf="parent"
+    android:layout_marginTop="16dp"/>
+
+<Button
+    android:id="@+id/btn_confirmar_pago"
+    android:layout_width="0dp"
+    android:layout_height="wrap_content"
+    android:text="PAGAR AHORA 4.99 €"
+    android:textSize="18sp"
+    android:padding="12dp"
+    app:layout_constraintBottom_toBottomOf="parent"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintEnd_toEndOf="parent"
+    android:layout_marginBottom="32dp"
+    android:backgroundTint="#003087"
+    android:textColor="@android:color/white"/>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

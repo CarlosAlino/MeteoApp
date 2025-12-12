@@ -1,0 +1,30 @@
+# Ignorar archivos de compilación de Gradle
+/build
+.gradle
+
+# Directorios de compilación de Android Studio
+/local.properties
+/.idea/workspace.xml
+/.idea/libraries
+.DS_Store
+
+# Archivos de depuración y caché
+/captures
+.externalNativeBuild
+.cxx
+.flutter-plugins-dependencies
+
+# Archivos de caché del módulo App
+/app/build
+/app/.cxx
+/app/.externalNativeBuild
+
+# Claves de depuración locales
+*.keystore
+
+# Google Services (ya que debe ser local y no subirse)
+/app/google-services.json
+
+# Logs de Firebase y Crashlytics
+firebase-debug.log
+crashlytics-build.properties

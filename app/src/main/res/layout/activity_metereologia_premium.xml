@@ -1,0 +1,408 @@
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    tools:context=".MetereologiaPremiumActivity"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="24dp">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/topBar"
+        android:layout_width="0dp"
+        android:layout_height="56dp"
+        android:background="#001c33"
+        android:paddingStart="16dp"
+        android:paddingEnd="16dp"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
+
+
+        <TextView
+            android:id="@+id/textViewWelcome"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Bienvenido"
+            android:textColor="@android:color/white"
+            android:textSize="20sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+
+        <ImageView
+            android:id="@+id/menuIcon"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:src="@drawable/ic_menu"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"/>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+    <!-- Temperatura actual -->
+
+    <TextView
+        android:id="@+id/textViewTemperature"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="-- °C"
+        android:textSize="100sp"
+        android:textColor="@android:color/white"
+        app:layout_constraintTop_toBottomOf="@+id/topBar"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="16dp"/>
+    <!-- Temperatura max / min -->
+
+    <TextView
+        android:id="@+id/textViewTemperatureMax"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        android:layout_marginEnd="8dp"
+        android:gravity="center"
+        android:text="-- °C"
+        android:textColor="@android:color/holo_red_dark"
+        android:textSize="35sp"
+        app:layout_constraintEnd_toStartOf="@id/textViewTemperatureMin"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/textViewTemperature" />
+
+    <!-- CardViews presion y humedad -->
+    <TextView
+        android:id="@+id/textViewTemperatureMin"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="24dp"
+        android:gravity="center"
+        android:text="-- °C"
+        android:textColor="@android:color/holo_blue_dark"
+        android:textSize="35sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/textViewTemperatureMax"
+        app:layout_constraintTop_toBottomOf="@id/textViewTemperature" />
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/cardPresion"
+        android:layout_width="0dp"
+        android:layout_height="150dp"
+        app:cardCornerRadius="16dp"
+        app:cardElevation="0dp"
+        android:background="@android:color/transparent"
+        app:cardBackgroundColor="#20FFFFFF"
+        app:cardUseCompatPadding="false"
+        app:layout_constraintTop_toBottomOf="@id/textViewTemperatureMax"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/cardHumedad"
+        android:layout_marginTop="24dp"
+        android:layout_marginEnd="8dp">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <TextView
+                android:id="@+id/textLabelPresion"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="44dp"
+                android:gravity="center"
+                android:text="Presión"
+                android:textColor="@android:color/white"
+                android:textSize="20sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/textViewValorPresion"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="-- hPa"
+                android:textColor="@android:color/white"
+                android:textSize="24sp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.504"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/textLabelPresion"
+                app:layout_constraintVertical_bias="0.191" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.cardview.widget.CardView>
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/cardHumedad"
+        android:layout_width="0dp"
+        android:layout_height="150dp"
+        app:cardCornerRadius="16dp"
+        app:cardElevation="0dp"
+        android:background="@android:color/transparent"
+        app:cardBackgroundColor="#20FFFFFF"
+        app:cardUseCompatPadding="false"
+
+        app:layout_constraintTop_toBottomOf="@id/textViewTemperatureMin"
+        app:layout_constraintStart_toEndOf="@id/cardPresion"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="24dp"
+        android:layout_marginStart="8dp">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <TextView
+                android:id="@+id/textLabelHumedad"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Humedad"
+                android:textSize="20sp"
+                android:textColor="@android:color/white"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                android:layout_marginTop="8dp"
+                android:gravity="center"/>
+
+            <TextView
+                android:id="@+id/textViewValorHumedad"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="-- %"
+                android:textSize="24sp"
+                android:textColor="@android:color/white"
+                app:layout_constraintTop_toBottomOf="@id/textLabelHumedad"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                android:gravity="center"/>
+
+            <com.telematica.meteoapp.CirculoHumedadActivity
+                android:id="@+id/humidityCircle"
+                android:layout_width="105dp"
+                android:layout_height="100dp"
+                app:layout_constraintTop_toBottomOf="@id/textLabelHumedad"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                android:layout_marginTop="8dp"/>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.cardview.widget.CardView>
+
+    <!-- CARD: PRECIPITACIÓN -->
+    <androidx.cardview.widget.CardView
+        android:id="@+id/cardPrecipitacion"
+        android:layout_width="0dp"
+        android:layout_height="150dp"
+        app:cardCornerRadius="16dp"
+        app:cardElevation="0dp"
+        android:background="@android:color/transparent"
+        app:cardBackgroundColor="#20FFFFFF"
+        app:cardUseCompatPadding="false"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="8dp"
+        app:layout_constraintTop_toBottomOf="@id/cardPresion"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/cardViento">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <TextView
+                android:id="@+id/textLabelPrecipitacion"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Precipitación"
+                android:textSize="20sp"
+                android:textColor="@android:color/white"
+                android:gravity="center"
+                android:layout_marginTop="8dp"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"/>
+
+            <TextView
+                android:id="@+id/textViewValorPrecipitacion"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="-- %"
+                android:textSize="24sp"
+                android:textColor="@android:color/white"
+                android:gravity="center"
+                app:layout_constraintTop_toBottomOf="@id/textLabelPrecipitacion"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"/>
+
+            <com.telematica.meteoapp.CirculoHumedadActivity
+                android:id="@+id/PrecipitacionCircle"
+                android:layout_width="105dp"
+                android:layout_height="100dp"
+                app:layout_constraintTop_toBottomOf="@id/textLabelPrecipitacion"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                android:layout_marginTop="8dp"/>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.cardview.widget.CardView>
+
+    <!-- CARD: VIENTO Y DIRECCIÓN -->
+    <androidx.cardview.widget.CardView
+        android:id="@+id/cardViento"
+        android:layout_width="0dp"
+        android:layout_height="150dp"
+        app:cardCornerRadius="16dp"
+        app:cardElevation="0dp"
+        android:background="@android:color/transparent"
+        app:cardBackgroundColor="#20FFFFFF"
+        app:cardUseCompatPadding="false"
+        android:layout_marginTop="16dp"
+        android:layout_marginStart="8dp"
+        app:layout_constraintTop_toBottomOf="@id/cardHumedad"
+        app:layout_constraintStart_toEndOf="@id/cardPrecipitacion"
+        app:layout_constraintEnd_toEndOf="parent">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <TextView
+                android:id="@+id/textLabelViento"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Viento"
+                android:textSize="20sp"
+                android:textColor="@android:color/white"
+                android:gravity="center"
+                android:layout_marginTop="8dp"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"/>
+
+            <TextView
+                android:id="@+id/textViewValorViento"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="-- km/h"
+                android:textSize="24sp"
+                android:textColor="@android:color/white"
+                app:layout_constraintTop_toBottomOf="@id/textLabelViento"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"/>
+
+            <TextView
+                android:id="@+id/textViewDireccionViento"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="--°"
+                android:textSize="20sp"
+                android:textColor="@android:color/white"
+                app:layout_constraintTop_toBottomOf="@id/textViewValorViento"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"/>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.cardview.widget.CardView>
+
+    <!-- CARD: SALIDA Y PUESTA DEL SOL -->
+    <androidx.cardview.widget.CardView
+        android:id="@+id/cardSol"
+        android:layout_width="0dp"
+        android:layout_height="170dp"
+        app:cardCornerRadius="16dp"
+        app:cardElevation="0dp"
+        android:background="@android:color/transparent"
+        app:cardBackgroundColor="#20FFFFFF"
+        app:cardUseCompatPadding="false"
+        android:layout_marginTop="16dp"
+        app:layout_constraintTop_toBottomOf="@id/cardViento"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <!-- Título -->
+            <TextView
+                android:id="@+id/textLabelSol"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Sol"
+                android:textSize="20sp"
+                android:textColor="@android:color/white"
+                android:layout_marginTop="8dp"
+                android:gravity="center"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"/>
+
+            <!-- Imagen curva (sun path) -->
+            <ImageView
+                android:id="@+id/sunPathImage"
+                android:layout_width="120dp"
+                android:layout_height="60dp"
+                android:src="@drawable/sun_curve"
+                android:layout_marginTop="8dp"
+                app:layout_constraintTop_toBottomOf="@id/textLabelSol"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"/>
+
+            <!-- Hora Sunrise -->
+
+            <TextView
+                android:id="@+id/textViewSunrise"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="32dp"
+                android:layout_marginTop="12dp"
+                android:text="--:--"
+                android:textColor="@android:color/white"
+                android:textSize="22sp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/sunPathImage" />
+
+            <TextView
+                android:id="@+id/textViewSunriseLabel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Salida"
+                android:textColor="@android:color/white"
+                android:textSize="16sp"
+                app:layout_constraintStart_toStartOf="@id/textViewSunrise"
+                app:layout_constraintTop_toBottomOf="@id/textViewSunrise" />
+
+            <!-- Hora Sunset -->
+            <TextView
+                android:id="@+id/textViewSunset"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="--:--"
+                android:textSize="22sp"
+                android:textColor="@android:color/white"
+                app:layout_constraintTop_toBottomOf="@id/sunPathImage"
+                app:layout_constraintEnd_toEndOf="parent"
+                android:layout_marginEnd="32dp"/>
+
+            <TextView
+                android:id="@+id/textViewSunsetLabel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Puesta"
+                android:textSize="16sp"
+                android:textColor="@android:color/white"
+                app:layout_constraintTop_toBottomOf="@id/textViewSunset"
+                app:layout_constraintEnd_toEndOf="@id/textViewSunset"/>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </androidx.cardview.widget.CardView>
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>
