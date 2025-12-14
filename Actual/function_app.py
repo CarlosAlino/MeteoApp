@@ -1,3 +1,10 @@
+"""
+Azure Function App para recopilación automática de datos meteorológicos
+=========================================================================
+Este módulo implementa dos funciones principales:
+Timer Trigger: Ejecuta consultas periódicas a OpenWeather API cada 60 minutos
+"""
+
 import azure.functions as func
 import logging
 import os
@@ -8,16 +15,18 @@ import requests
 from datetime import datetime, timezone, timedelta
 
 
-# -------------------------------------------------------------------
-# FIRESTORE INIT
-# -------------------------------------------------------------------
+# ===========================================================================
+# INICIALIZACIÓN DE FIRESTORE
+# ===========================================================================
 
 def init_firestore():
-
+    # Recuperar credenciales de las variables de entorno
+    # El replace es necesario porque Azure almacena saltos de línea como \\n
     private_key = os.environ["FIREBASE_PRIVATE_KEY"].replace("\\n", "\n")
     client_email = os.environ["FIREBASE_CLIENT_EMAIL"]
     project_id = os.environ["FIREBASE_PROJECT_ID"]
 
+    # Construir diccionario de credenciales según el formato de Google Cloud
     credentials_dict = {
         "type": "service_account",
         "project_id": project_id,
@@ -31,30 +40,43 @@ def init_firestore():
         "client_x509_cert_url": ""
     }
 
+    # Crear objeto de credenciales desde el diccionario
     credentials = service_account.Credentials.from_service_account_info(credentials_dict)
+    # Retornar cliente de Firestore autenticado
     return firestore.Client(project=project_id, credentials=credentials)
 
-
+# Inicializar la base de datos globalmente (se ejecuta una sola vez al cargar la función)
 db = init_firestore()
 
 
 # -------------------------------------------------------------------
-# 🌤️ WEATHER FETCHER (OpenWeather)
+# 🌤️ OBTENCIÓN DE DATOS METEOROLÓGICOS(OpenWeather)
 # -------------------------------------------------------------------
 
-def get_weather_openweather(city):
+def obtenerDatos(city):
+    # Obtener la API key desde variables de entorno
     API_KEY = os.environ["OPENWEATHER_API_KEY"]
 
+    # Construir URL de la petición con parámetros:
+    # - q: nombre de la ciudad
+    # - appid: clave de API
+    # - units=metric: para obtener temperaturas en Celsius
     url = f"https://api.openweathermap.org/data/2.5/weather?q={city}&appid={API_KEY}&units=metric"
 
+    # Realizar petición GET a la API
     r = requests.get(url)
 
+    # Verificar si la petición fue exitosa
     if r.status_code != 200:
         raise Exception("OpenWeather error: " + r.text)
+    
+    # Definir zona horaria UTC+1 (hora española peninsular)
     utc_plus_1 = timezone(timedelta(hours=1))
+
+    # Parsear respuesta JSON
     data = r.json()
-    #return data
-    # Formateamos a una estructura limpia
+    
+    # Extraer y formatear datos relevantes de la respuesta
     return {
         "city": data.get("name", city),
         "temperature": data["main"]["temp"],
@@ -72,60 +94,42 @@ def get_weather_openweather(city):
 
 
 # -------------------------------------------------------------------
-# ⏱️ TIMER TRIGGER (Cada X minutos)
+# ⏱️ AZURE FUNCTION APP TIMER TRIGGER (Cada 60 minutos automáticamente)
 # -------------------------------------------------------------------
 
 app = func.FunctionApp(http_auth_level=func.AuthLevel.FUNCTION)
 
 @app.timer_trigger(
-    schedule="0 */60 * * * *",
+    schedule="0 */60 * * * *", # Expresión CRON: cada 60 minutos (en el minuto 0 de cada hora)
     arg_name="myTimer",
-    run_on_startup=False,
-    use_monitor=False
+    run_on_startup=False,   # No ejecutar al iniciar la función
+    use_monitor=False       # No usar monitor de estado (simplifica el despliegue)
 )
 def timer_trigger(myTimer: func.TimerRequest) -> None:
 
     logging.info("⏱️ Timer trigger ejecutado")
 
-    cities = ["Madrid", "Pollensa", "Palma", "Inca", "Manacor", "Campos", "Soller"]
+    # Lista de ciudades a monitorear
+    cities = ["Madrid", "Pollensa", "Palma", "Inca",
+             "Manacor", "Campos", "Soller","Helsinki", "Melbourne"]
 
     try:
+        # Iterar sobre cada ciudad
         for city in cities:
-            weather = get_weather_openweather(city)
+            # Obtener datos meteorológicos actuales
+            weather = obtenerDatos(city)
 
+            # Guardar en Firestore:
+            # - Colección: nombre de la ciudad
+            # - Documento: "Actual" (siempre sobrescribe con datos más recientes)
+            # - Datos: todos los campos del clima + timestamp del servidor
             db.collection(city).document("Actual").set({
-                **weather,
-                "timestamp": firestore.SERVER_TIMESTAMP
+                **weather,  # Desempaquetar todos los campos del diccionario weather
+                "timestamp": firestore.SERVER_TIMESTAMP # Añadir timestamp del servidor
             })
 
             logging.info(f"✔ Datos guardados para {city}")
 
     except Exception as e:
+        # Capturar cualquier error durante el proceso
         logging.error(f"❌ Error: {e}")
-
-
-# -------------------------------------------------------------------
-# 🌍 HTTP trigger (Para pruebas desde navegador o Postman)
-# -------------------------------------------------------------------
-
-@app.route(route="test_weather")
-def http_trigger(req: func.HttpRequest) -> func.HttpResponse:
-    logging.info("➡️ HTTP trigger llamado")
-
-    try:
-        city = req.params.get("city", "Madrid")
-        weather = get_weather_openweather(city)
-
-        # Devuelve el JSON completo formateado
-        return func.HttpResponse(
-            json.dumps(weather, indent=4),
-            mimetype="application/json",
-            status_code=200
-        )
-
-    except Exception as e:
-        return func.HttpResponse(
-            f"Error: {str(e)}",
-            status_code=500
-
-        )
